@@ -1,0 +1,26 @@
+{\rtf1\ansi\ansicpg936\cocoartf2761
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \{\
+  "prompt_id": "LP-2024-PHYS-003",\
+  "raw_query": "Grade 8 optics introduction & cooperative inquiry, 38 min",\
+  "educational_context": \{\
+    "subject": "Physics",\
+    "grade_level": "8",\
+    "duration_minutes": 38,\
+    "pedagogical_model": "5E",\
+    "curriculum_standard": "National Middle-School Physics Curriculum"\
+  \},\
+  "constraints": [\
+    "8-min guided introduction",\
+    "4-min first probe",\
+    "11-min second probe with peer work",\
+    "7-min hands-on experience",\
+    "17-min real-world application",\
+    "3-min summary"\
+  ]\
+\}}
