@@ -1,0 +1,103 @@
+# AdaptKG: Configuration for Domain-Adaptive KG Clustering
+# 
+# Reference: AdaptKG (GP-LLM), NeurIPS 2026 (under review)
+# Section 4: Methodology, Section 5: Experiments
+# 
+# Usage:
+#   python -m gp_llm.experiments.train --config config/config.yaml
+#   python -m gp_llm.experiments.ablation --config config/config.yaml
+#   python -m gp_llm.experiments.transfer --config config/config.yaml
+#
+# Four AdaptKG components:
+# 1. Degree-Aware Ego-Graph Sampling (Sec 4.1)
+# 2. Relation-Specific Prompting (Sec 4.2)
+# 3. Bayesian Uncertainty-Guided Clustering (Sec 4.3)
+# 4. Structure-Aware Domain Adaptation (Sec 4.4)
+
+# ===================== Data =====================
+datasets:
+  train: "FB15K-237"
+  test: "FB15K-237"
+  transfer_pairs:
+    - [FB15K-237, WN18RR]
+    - [FB15K-237, YAGO3-10]
+    - [WN18RR, FB15K-237]
+    - [YAGO3-10, PrimeKG]
+  data_dir: "../data"
+  num_seeds: 10
+
+# ===================== Model =====================
+model:
+  gnn:
+    backbone: "rgcn"
+    num_layers: 3
+    hidden_dim: 256
+    num_bases: 5
+    dropout: 0.1
+    activation: "relu"
+
+  prompt:
+    dim: 256
+    length: 32  # L
+    temperature: 0.5  # tau for contrastive loss
+    num_relations: null  # auto-detect from dataset
+
+  sampling:
+    sample_size: 512  # K
+    target_volume: 100  # C
+    quantiles: [0.25, 0.75]
+
+  bayesian:
+    num_mc_samples: 10
+    dropout_rate: 0.1
+    combined_weight: 0.5  # lambda for U_combined
+    uncertainty_threshold: 0.01  # epsilon
+    stability_threshold: 0.95  # Jaccard
+    max_epochs: 500
+
+  domain_adaptation:
+    mmd_weight: 0.1
+    mlp_hidden: [64, 64]
+    mlp_output: 2  # gamma, beta
+
+# ===================== Optimization =====================
+optim:
+  optimizer: "adam"
+  lr: 1.0e-3
+  weight_decay: 1.0e-5
+  lr_scheduler: "cosine"
+  warmup_epochs: 0
+  batch_size: 512
+
+# ===================== Training =====================
+train:
+  seed: 42
+  max_epochs: 500
+  early_stopping_patience: 50
+  gradient_clip: 1.0
+  device: "auto"  # auto, cpu, cuda:0
+
+# ===================== Evaluation =====================
+eval:
+  metrics: ["nmi", "ari", "hits@10"]
+  cluster_method: "oracle_k"  # oracle_k, silhouette, elbow
+  num_clusters: null  # auto from dataset
+  verbose: true
+
+# ===================== Ablation =====================
+ablation:
+  configurations:
+    - "baseline"
+    - "+degree_aware_sampling"
+    - "+relation_specific_prompting"
+    - "+bayesian_uncertainty"
+    - "+domain_adaptation"
+    - "full"
+
+# ===================== Logging =====================
+logging:
+  log_dir: "../logs"
+  experiment_name: "adaptkg_fb15k237"
+  wandb_project: "AdaptKG"
+  save_checkpoints: true
+  checkpoint_dir: "../checkpoints"

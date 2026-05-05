@@ -1,0 +1,18 @@
+# GP-LLM Dependencies (Pure PyTorch - No PyG)
+# Graph Processing
+torch>=2.0.0
+
+# Deep Learning
+# einops>=0.6.0  # optional
+
+# Data Processing
+numpy>=1.24.0
+scipy>=1.11.0
+scikit-learn>=1.3.0
+networkx>=3.1.0
+
+# Configuration
+pyyaml>=6.0
+
+# Logging
+tqdm>=4.65.0
